@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/branch")
 public class BranchController {
+
     private final IBranchService branchService;
 
     @GetMapping("/{title}")
@@ -21,6 +22,7 @@ public class BranchController {
     public BranchResponse getBranch(@PathVariable String title){
         return branchService.findBranchByTitle(title);
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)

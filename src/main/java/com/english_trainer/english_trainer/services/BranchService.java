@@ -2,6 +2,7 @@ package com.english_trainer.english_trainer.services;
 
 import com.english_trainer.english_trainer.domain.Branch;
 import com.english_trainer.english_trainer.domain.Question;
+import com.english_trainer.english_trainer.exceptions.DataBaseRefactoringException;
 import com.english_trainer.english_trainer.exceptions.NullResultException;
 import com.english_trainer.english_trainer.payload.BranchResponse;
 import com.english_trainer.english_trainer.repository.BranchRepository;
@@ -22,7 +23,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public @NonNull BranchResponse findBranchByTitle(String title) {
-        Branch branch = branchRepository.findBranchByTitle(title).orElseThrow(()-> new NullResultException("По данному запросу ничего не найдено"));
+        Branch branch = branchRepository.findBranchByTitle(title).orElseThrow(()-> new NullResultException("Отрасли с заданным названием не существует в БД"));
 
         Set<Question> questions = questionRepository.findQuestionsByBranch(branch).orElse(new HashSet<>());
 
@@ -34,7 +35,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public @NonNull Branch findBranchById(Long id) {
-        return branchRepository.findBranchById(id).orElseThrow(()->new NullResultException("По данному запросу ничего не найдено"));
+        return branchRepository.findBranchById(id).orElseThrow(()->new NullResultException("Отрасли с заданным id не существует в БД"));
     }
 
     @Override
@@ -42,6 +43,8 @@ public class BranchService implements IBranchService {
         Branch branchBD = branchRepository.findBranchByTitle(branch.getTitle()).orElse(null);
         if (branchBD == null){
             branchRepository.save(branch);
+        }else {
+            throw new DataBaseRefactoringException("Отрасль с таким названием уже существует в БД");
         }
     }
 }

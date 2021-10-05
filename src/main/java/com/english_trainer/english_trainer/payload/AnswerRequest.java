@@ -5,11 +5,10 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class QuestionRequest {
-    @NotBlank
-    private String question;
-
+public class AnswerRequest {
     @NotBlank
     private String answer;
 
+    @NotBlank
+    private Long question_id;
 }

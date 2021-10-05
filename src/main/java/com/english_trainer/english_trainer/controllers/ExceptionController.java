@@ -1,5 +1,6 @@
 package com.english_trainer.english_trainer.controllers;
 
+import com.english_trainer.english_trainer.exceptions.DataBaseRefactoringException;
 import com.english_trainer.english_trainer.exceptions.NullResultException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +14,13 @@ public class ExceptionController {
     @ExceptionHandler(NullResultException.class)
     public Error onNullResult(NullResultException exception){
         return new Error("Incorrect parameters", exception.getMessage());
+    }
+
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(DataBaseRefactoringException.class)
+    public Error onRefactoringDBProblem(DataBaseRefactoringException exception){
+        return new Error("Data base error", exception.getMessage());
     }
 
 }
